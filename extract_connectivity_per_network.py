@@ -26,7 +26,8 @@ import numpy as np
 #     'working_memory.csv'
 # ]
 
-def interface(neuro_path,sub_path,out_path,z_threshold,timecourse_csv,network_files):
+
+def interface(neuro_path, sub_path, out_path, z_threshold, timecourse_csv, network_files):
     ## Archived code due to change of use regions from 50% coverage metric to z_score metric
     # neuro_voxel = pd.read_csv(os.path.join(neuro_path, 'nonzero_HCP_neurosynth_networks_concat.csv'), header=None)
     # total_voxel = pd.read_csv(os.path.join(neuro_path, 'nonzero_HCP_10050-2_FNL_preproc_Atlas.csv'), header=None)
@@ -135,9 +136,11 @@ def interface(neuro_path,sub_path,out_path,z_threshold,timecourse_csv,network_fi
         # Saving it out subjects down rows; region pairs across columns
         in_df.T.to_csv(os.path.join(out_path, save_name), header=False)
 
+
 def cli_interface():
     try:
-        neuro_path, sub_path, out_path, z_threshold, timecourse_csv, network_files = sys.argv[1:]
+        neuro_path, sub_path, out_path, z_threshold, timecourse_csv = sys.argv[1:5]
+        network_files = sys.argv[6:]
     except:
         print("usage: {}  <neuro_path> <sub_path> <out_path> <z_threshold> <timecourse_csv> <network_files>".format(sys.argv[0]))
         sys.exit(1)
