@@ -46,11 +46,11 @@ def interface(neuro_path, sub_path, out_path, z_threshold, timecourse_csv, netwo
     for (dirpath, dirnames, filenames) in os.walk(sub_path):
         sub_list.extend(dirnames)
         break
-    print sub_list
+    print(sub_list)
 
     # Loop Through each network's region selection using the use_regions variable
     for network, save_name in enumerate(network_files):
-        print network
+        print(network)
         # This part creates a dataframe with the regions only; the for loop will feed into this df.
         # Grabs the full path for all subjects controlling for multiple visit dates
         wild_path_0 = os.path.join(sub_path + sub_list[0], '*', '*', sub_list[0],
@@ -58,7 +58,7 @@ def interface(neuro_path, sub_path, out_path, z_threshold, timecourse_csv, netwo
         full_path_0 = glob.glob(wild_path_0)
 
         if not full_path_0:
-            print >> sys.stderr, sub_list[0], "glob %s: target doesn't exist" % wild_path_0
+            print(sub_list[0], "glob %s: target doesn't exist" % wild_path_0, file=sys.stderr)
             continue
 
         # reads in the parcellation timecourse
@@ -87,7 +87,7 @@ def interface(neuro_path, sub_path, out_path, z_threshold, timecourse_csv, netwo
             full_path = glob.glob(wild_path)
 
             if not full_path_0:
-                print >> sys.stderr, sub_id, "glob %s: target doesn't exist" % wild_path_0
+                print(sub_id, "glob %s: target doesn't exist" % wild_path_0, file=sys.stderr)
                 continue
 
             for path in full_path:
@@ -142,9 +142,11 @@ def cli_interface():
         neuro_path, sub_path, out_path, z_threshold, timecourse_csv = sys.argv[1:5]
         network_files = sys.argv[6:]
     except:
-        print("usage: {}  <neuro_path> <sub_path> <out_path> <z_threshold> <timecourse_csv> <network_files>".format(sys.argv[0]))
+        print("usage: {}  <neuro_path> <sub_path> <out_path> <z_threshold> <timecourse_csv> <network_files>"
+              .format(sys.argv[0]))
         sys.exit(1)
     interface(neuro_path, sub_path, out_path, z_threshold, timecourse_csv, network_files)
+
 
 if __name__ == '__main__':
     cli_interface()
