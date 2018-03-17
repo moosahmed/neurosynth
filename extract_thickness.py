@@ -49,6 +49,7 @@ def cifti_convert_to_text(cifti):
         subprocess.call(cmd)
     return path2txt
 
+
 def interface(neuro_path, sub_path, out_path, z_threshold, target_file, network_files):
     # Read The neurosynth csv and fully covered csv; then compute which regions have a z-score more than 1.97
     # only use those regions
@@ -103,6 +104,7 @@ def interface(neuro_path, sub_path, out_path, z_threshold, target_file, network_
         print(in_df)
         # Saving it out subjects down rows; region pairs across columns
         in_df.T.to_csv(os.path.join(out_path, save_name))
+
 
 if __name__ == '__main__':
     # cli_interface()
