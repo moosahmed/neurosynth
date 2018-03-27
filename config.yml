@@ -1,0 +1,20 @@
+neuro_path: '/mnt/max/shared/projects/neurosynth/roi_selection/average_nonzero_HCP_neurosynth_networks_concat.csv'
+sub_path: '/mnt/max/shared/data/study/ADHD/HCP/processed/ADHD_NoFMNoT2/'
+out_path: '/mnt/max/shared/projects/neurosynth/network_csvs/average_nonzero_1.97_threshold/'
+z_threshold: 1.97
+timecourse_csv: 'HCP.subcortical.32k_fs_LR.csv'
+network_files:
+ - 'amygdala_insula.csv'
+ - 'arousal.csv'
+ - 'attentional_control.csv'
+ - 'default_network.csv'
+ - 'dorsal_attention.csv'
+ - 'monetary_reward.csv'
+ - 'response_inhibition.csv'
+ - 'reward_anticipation.csv'
+ - 'selective_attention.csv'
+ - 'verbal_working.csv'
+ - 'working_memory.csv'
+# These are optional, you may leave blank if morphology metrics are not required.
+morph_target_file: 'thickness.32k_fs_LR.dscalar.nii'
+parcellation: '/mnt/max/shared/ROI_sets/Surface_schemes/Human/HCP/fsLR/HCP.32k_fs_LR.dlabel.nii'

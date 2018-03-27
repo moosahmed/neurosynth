@@ -6,35 +6,18 @@ import sys
 
 import pandas as pd
 import numpy as np
+import yaml
 
-# SET PATHS
-neuro_path = '/mnt/max/shared/projects/neurosynth/roi_selection/average_nonzero_HCP_neurosynth_networks_concat.csv'
-sub_path = '/mnt/max/shared/data/study/ADHD/HCP/processed/ADHD_NoFMNoT2/'
-out_path = '/mnt/max/shared/projects/neurosynth/network_csvs/average_nonzero_1.97_threshold/'
-z_threshold = 1.97
-timecourse_csv = 'HCP.subcortical.32k_fs_LR.csv'
-morph_target_file = 'thickness.32k_fs_LR.dscalar.nii'
-network_files = [
-    'amygdala_insula.csv',
-    'arousal.csv',
-    'attentional_control.csv',
-    'default_network.csv',
-    'dorsal_attention.csv',
-    'monetary_reward.csv',
-    'response_inhibition.csv',
-    'reward_anticipation.csv',
-    'selective_attention.csv',
-    'verbal_working.csv',
-    'working_memory.csv'
-]
-parcellation = '/mnt/max/shared/ROI_sets/Surface_schemes/Human/HCP/fsLR/HCP.32k_fs_LR.dlabel.nii'
 
 def cifti_parcelate(cifti, parcellation):
+    """
+    this wraps the wb_command bash utility to be used in python
+    """
     parc_name = '.'.join(parcellation.split('/')[-1].split('.')[:-3])
     parcelated_cifti = '.'.join(cifti.split('.')[:-3])+'.'+parc_name+'.pscalar.nii'
     if os.path.isfile(parcelated_cifti):
-        ...
-        # print('%s exists. skipping parcellation step.' % parcelated_cifti, file=sys.stdout)
+        # ...
+        print('%s exists. skipping parcellation step.' % parcelated_cifti, file=sys.stdout)
     else:
         cmd = ['/usr/local/bin/wb_command', '-cifti-parcellate', cifti, parcellation, 'COLUMN', parcelated_cifti]
         subprocess.call(cmd)
@@ -42,10 +25,13 @@ def cifti_parcelate(cifti, parcellation):
 
 
 def cifti_convert_to_text(cifti):
+    """
+    this wraps the wb_command bash utility to be used in python
+    """
     path2txt = '.'.join(cifti.split('.')[:-2])+'.txt'
     if os.path.isfile(path2txt):
-        ...
-        # print('%s exists. skipping conversion step.' % path2txt, file=sys.stdout)
+        # ...
+        print('%s exists. skipping conversion step.' % path2txt, file=sys.stdout)
     else:
         cmd = ['/usr/local/bin/wb_command', '-cifti-convert', '-to-text', cifti, path2txt]
         subprocess.call(cmd)
@@ -106,12 +92,14 @@ def make_vectorized_df(path, network, use_regions):
 
 def interface(neuro_path, sub_path, out_path, z_threshold, timecourse_csv, network_files,
               morph_target_file=None, parcellation=None):
+    print(neuro_path, sub_path, out_path, network_files, file=sys.stdout)
     neuro_voxel = pd.read_csv(neuro_path, header=None)
     use_regions = neuro_voxel > z_threshold  # Use only the regions that have a z-score > 1.97
     sub_list = make_sublist(sub_path)
 
     for network, save_name in enumerate(network_files):
         print(network)
+        # TODO: Remove this for release
         if network == 0:
             continue
 
@@ -190,18 +178,16 @@ def interface(neuro_path, sub_path, out_path, z_threshold, timecourse_csv, netwo
             # morph_df.T.to_csv(os.path.join(out_path, morph_save_name))
 
 
-# def cli_interface():
-#     try:
-#         neuro_path, sub_path, out_path, z_threshold, timecourse_csv = sys.argv[1:5]
-#         network_files = sys.argv[6:]
-#     except:
-#         print("usage: {}  <neuro_path> <sub_path> <out_path> <z_threshold> <timecourse_csv> <network_files>"
-#               .format(sys.argv[0]))
-#         sys.exit(1)
-#     interface(neuro_path, sub_path, out_path, z_threshold, timecourse_csv, network_files)
+def cli_interface():
+    try:
+        yaml_config = sys.argv[1]
+    except:
+        print("usage: {}  <yaml_config>".format(sys.argv[0]))
+        sys.exit(1)
+    with open(yaml_config, 'r') as f:
+        args = yaml.load(f)
+    interface(**args)
 
 
 if __name__ == '__main__':
-    # cli_interface()
-    interface(neuro_path, sub_path, out_path, z_threshold, timecourse_csv, network_files, morph_target_file,
-              parcellation)
+    cli_interface()
