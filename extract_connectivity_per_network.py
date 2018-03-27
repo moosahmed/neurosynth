@@ -58,7 +58,7 @@ def get_scanpaths(sub_path, sub_id, end_file, do='connectivity'):
     lookup = {'connectivity': ('analyses_v2', 'timecourses'), 'morphology': ('MNINonLinear', 'fsaverage_LR32k')}
     folder = lookup[do]
     wild_path = os.path.join(sub_path + sub_id, '*', '*', sub_id,
-                               folder[0], folder[1], end_file)
+                             folder[0], folder[1], end_file)
     return glob.glob(wild_path)
 
 
@@ -92,16 +92,12 @@ def make_vectorized_df(path, network, use_regions):
 
 def interface(neuro_path, sub_path, out_path, z_threshold, timecourse_csv, network_files,
               morph_target_file=None, parcellation=None):
-    print(neuro_path, sub_path, out_path, network_files, file=sys.stdout)
     neuro_voxel = pd.read_csv(neuro_path, header=None)
     use_regions = neuro_voxel > z_threshold  # Use only the regions that have a z-score > 1.97
     sub_list = make_sublist(sub_path)
 
     for network, save_name in enumerate(network_files):
         print(network)
-        # TODO: Remove this for release
-        if network == 0:
-            continue
 
         full_path_0 = get_scanpaths(sub_path, sub_list[0], timecourse_csv)
         if not full_path_0:
@@ -170,12 +166,12 @@ def interface(neuro_path, sub_path, out_path, z_threshold, timecourse_csv, netwo
         print(in_df.T)
 
         # Saving it out subjects down rows; region pairs across columns
-        # in_df.T.to_csv(os.path.join(out_path, save_name), header=False)
+        in_df.T.to_csv(os.path.join(out_path, save_name), header=False)
         if morph_target_file:
             morph_save_name = '.'.join(save_name.split('.')[:-1])+'_'+morph_target_file.split('.')[0]+'.csv'
             print(morph_save_name)
             print(morph_df.T)
-            # morph_df.T.to_csv(os.path.join(out_path, morph_save_name))
+            morph_df.T.to_csv(os.path.join(out_path, morph_save_name))
 
 
 def cli_interface():
