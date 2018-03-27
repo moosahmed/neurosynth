@@ -22,6 +22,8 @@ network_files:
  - 'verbal_working.csv'
  - 'working_memory.csv'
 # These are optional, you may leave blank if morphology metrics are not required.
+# Path to your workbench command
+wb_command: '/usr/local/bin/wb_command'
 # Which morphology metric you want 
 morph_target_file: 'thickness.32k_fs_LR.dscalar.nii'
 # Which parcellation to use to parcelate the morphology file 
