@@ -1,0 +1,28 @@
+# Path to your neurosynth outputs
+neuro_path: '/mnt/max/shared/projects/neurosynth/roi_selection/average_nonzero_HCP_neurosynth_networks_concat.csv'
+# Path to your study directory
+sub_path: '/mnt/max/shared/data/study/ADHD/HCP/processed/ADHD_NoFMNoT2/'
+# Path to your output directory
+out_path: '/mnt/max/shared/projects/neurosynth/network_csvs/average_nonzero_1.97_threshold/'
+# The z_threshold you want to use for the selection of the regions identified by neurosynth 
+z_threshold: 1.97
+# What timecourse csv do you want to use for the subjects bold data
+timecourse_csv: 'HCP.subcortical.32k_fs_LR.csv'
+# All the networks ouput names, organised as they are in 'neuro_path'. Please be sure to add the '.csv'
+network_files:
+ - 'amygdala_insula.csv'
+ - 'arousal.csv'
+ - 'attentional_control.csv'
+ - 'default_network.csv'
+ - 'dorsal_attention.csv'
+ - 'monetary_reward.csv'
+ - 'response_inhibition.csv'
+ - 'reward_anticipation.csv'
+ - 'selective_attention.csv'
+ - 'verbal_working.csv'
+ - 'working_memory.csv'
+# These are optional, you may leave blank if morphology metrics are not required.
+# Which morphology metric you want 
+morph_target_file: 'thickness.32k_fs_LR.dscalar.nii'
+# Which parcellation to use to parcelate the morphology file 
+parcellation: '/mnt/max/shared/ROI_sets/Surface_schemes/Human/HCP/fsLR/HCP.32k_fs_LR.dlabel.nii'
