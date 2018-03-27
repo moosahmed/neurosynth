@@ -9,7 +9,7 @@ import numpy as np
 import yaml
 
 
-def cifti_parcelate(cifti, parcellation):
+def cifti_parcelate(wb_command, cifti, parcellation):
     """
     this wraps the wb_command bash utility to be used in python
     """
@@ -19,12 +19,12 @@ def cifti_parcelate(cifti, parcellation):
         # ...
         print('%s exists. skipping parcellation step.' % parcelated_cifti, file=sys.stdout)
     else:
-        cmd = ['/usr/local/bin/wb_command', '-cifti-parcellate', cifti, parcellation, 'COLUMN', parcelated_cifti]
+        cmd = [wb_command, '-cifti-parcellate', cifti, parcellation, 'COLUMN', parcelated_cifti]
         subprocess.call(cmd)
     return parcelated_cifti
 
 
-def cifti_convert_to_text(cifti):
+def cifti_convert_to_text(wb_command, cifti):
     """
     this wraps the wb_command bash utility to be used in python
     """
@@ -33,7 +33,7 @@ def cifti_convert_to_text(cifti):
         # ...
         print('%s exists. skipping conversion step.' % path2txt, file=sys.stdout)
     else:
-        cmd = ['/usr/local/bin/wb_command', '-cifti-convert', '-to-text', cifti, path2txt]
+        cmd = [wb_command, '-cifti-convert', '-to-text', cifti, path2txt]
         subprocess.call(cmd)
     return path2txt
 
@@ -91,7 +91,7 @@ def make_vectorized_df(path, network, use_regions):
 
 
 def interface(neuro_path, sub_path, out_path, z_threshold, timecourse_csv, network_files,
-              morph_target_file=None, parcellation=None):
+              morph_target_file=None, parcellation=None, wb_command=None):
     neuro_voxel = pd.read_csv(neuro_path, header=None)
     use_regions = neuro_voxel > z_threshold  # Use only the regions that have a z-score > 1.97
     sub_list = make_sublist(sub_path)
@@ -133,7 +133,7 @@ def interface(neuro_path, sub_path, out_path, z_threshold, timecourse_csv, netwo
 
                 for morph_path in all_morph_paths:
                     morph_subject = get_scanid(sub_id, morph_path)
-                    cifti_txt = cifti_convert_to_text(cifti_parcelate(morph_path, parcellation))
+                    cifti_txt = cifti_convert_to_text(wb_command, cifti_parcelate(wb_command, morph_path, parcellation))
                     if not os.path.isfile(cifti_txt):
                         print(morph_subject, 'Not able to parcellate dscalar', file=sys.stderr)
                         continue
